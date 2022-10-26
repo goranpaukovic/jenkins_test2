@@ -42,6 +42,7 @@ MACHINE ??= "qemux86-64"
 #DL_DIR ?= "${TOPDIR}/downloads"
 SOURCE_MIRROR_URL ?= "file:///opt/yocto_shares/downloads/"
 
+BB_NO_NETWORK = "1"
 #
 # Where to place shared-state files
 #
