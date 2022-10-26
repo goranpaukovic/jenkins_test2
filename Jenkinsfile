@@ -14,6 +14,12 @@ pipeline {
   }
   
   stages {
+    stage('Clean WS') {
+      steps {
+        cleanWs()
+        checkout scm
+      }
+    }
     stage('Build sama5d27-wlsom1-ek') {
       steps {
         // csSlackNotifier('STARTED', true)
