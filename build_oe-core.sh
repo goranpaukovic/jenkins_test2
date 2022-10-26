@@ -1,5 +1,5 @@
 #!/bin/bash
-
+git clone git://git.openembedded.org/bitbake bitbake
 git checkout hardknott
 cd bitbake
 git checkout 1.50
