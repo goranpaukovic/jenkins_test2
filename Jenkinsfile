@@ -97,7 +97,7 @@ pipeline {
         status: "Pipeline Succes",
         webhookUrl: "${TEAMS_WEB_HOOK}",
         color: '00ff00',
-        message: "Build Successful: ${JOB_NAME} - ${BUILD_DISPLAY_NAME}<br>Build duration time: ${currentBuild.durationString}"
+        message: "Build Successful: ${JOB_NAME} - (<${env.BUILD_URL}|${BUILD_DISPLAY_NAME}>)<br>Build duration time: ${currentBuild.durationString}"
       )
     }
     failure {
