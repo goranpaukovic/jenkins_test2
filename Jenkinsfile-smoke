@@ -1,0 +1,42 @@
+pipeline {
+  agent {
+   label  'oe-build-gm-ccu-PoC'  
+  }
+  parameters {
+      string(name: "targetEnvironment", defaultValue: "default", description: "Opis varijable")
+  }
+  triggers {
+    upstream(upstreamProjects: "PoC_pipeline_1", threshold: hudson.model.Result.SUCCESS)
+  }
+  
+  stages {
+    stage('Smoke testsss sama5d27-wlsom1-ek') {
+      agent none
+      steps {
+        // csSlackNotifier('STARTED', true)
+        sh '''
+           echo "...Build..."
+           mkdir -p smoke-testt
+           touch smoke-testt/test-result1.xml
+           '''
+           echo "${params.targetEnvironment}"
+           step ([$class: 'CopyArtifact',
+                    projectName: 'PoC_pipeline_1',
+                    filter: "deploy-sama5d27-wlsom1-ek/build_file.obj",
+                    target: '']);
+      }
+    }
+  }
+  post {
+    success {
+      archiveArtifacts 'smoke-testt/**/*.*'
+    }
+    always {
+      // Put MS Teams notification
+      //csSlackNotifier(currentBuild.currentResult)
+      sh '''
+        echo "Finished"
+      '''
+    }
+  }
+}
