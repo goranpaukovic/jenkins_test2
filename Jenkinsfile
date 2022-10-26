@@ -23,7 +23,7 @@ pipeline {
            mkdir -p deploy-sama5d27-wlsom1-ek
            touch deploy-sama5d27-wlsom1-ek/build_file.obj
            date >> deploy-sama5d27-wlsom1-ek/build_file.obj
-           docker ps
+           docker run -i -v /opt/yocto_shares/sstate-cache:/opt/yocto_shares/sstate-cache -v /opt/yocto_shares/downloads:/opt/yocto_shares/downloads -v $PWD:/workdir --workdir=/workdir oe-build-goran:1.0 ./build_oe-core.sh
         '''
         // docker run -i -v /opt/yocto_shares/sstate-cache:/opt/yocto_shares/sstate-cache -v /opt/yocto_shares/downloads:/opt/yocto_shares/downloads -v $PWD:/workdir --workdir=/workdir oe-build-goran:1.0 ./build_oe-core.sh
         // sh "./scripts/build-release-sama5d27-wlsom1-ek.sh"
