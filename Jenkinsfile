@@ -20,6 +20,7 @@ pipeline {
         sh '''
            echo "...Build..."
            id
+           id -u
            mkdir -p deploy-sama5d27-wlsom1-ek
            touch deploy-sama5d27-wlsom1-ek/build_file.obj
            date >> deploy-sama5d27-wlsom1-ek/build_file.obj
