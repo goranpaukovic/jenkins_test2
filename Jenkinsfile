@@ -12,6 +12,10 @@ pipeline {
     durabilityHint('PERFORMANCE_OPTIMIZED')
     copyArtifactPermission('smoke-test')
   }
+
+  environment {
+    TEAMS_WEB_HOOK = 'https://creatorab.webhook.office.com/webhookb2/3faa5c1d-9e2b-4eca-a07e-6149c1bf818e@41edc297-cc3a-4756-9da1-a9eb6b1ca80d/IncomingWebhook/d52f17b71edd4692b18815f4ddce8788/d7a8b56a-cbe9-447a-b247-149d00841a7d'
+  }
   
   stages {
     stage('Clean WS') {
@@ -89,6 +93,19 @@ pipeline {
   post {
     success {
       archiveArtifacts 'deploy-sama5d27-wlsom1-ek/**/*.*'
+      office365ConnectorSend (
+        status: "Pipeline Succes",
+        webhookUrl: "${TEAMS_WEB_HOOK}",
+        color: '00ff00',
+        message: "Build Successful: ${JOB_NAME} - ${BUILD_DISPLAY_NAME}<br>Build duration time: ${currentBuild.durationString}"
+      )
+    }
+    failure {
+      office365ConnectorSend (
+        status: "Pipeline Failure",
+        webhookUrl: "${TEAMS_WEB_HOOK}",
+        color: 'FF0000',
+        message: "Build Failed: ${JOB_NAME} - ${BUILD_DISPLAY_NAME}<br>Build duration time: ${currentBuild.durationString}"
     }
     always {
       // Put MS Teams notification
