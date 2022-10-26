@@ -15,6 +15,7 @@ pipeline {
   
   stages {
     stage('Clean WS') {
+      when { expression { false } }
       steps {
         cleanWs()
         checkout scm
@@ -95,6 +96,10 @@ pipeline {
       sh '''
         echo "Finished"
       '''
+      junit(
+        allowEmptyResults: true,
+        testResults: 'unit_tests/reports/*.xml'
+      )
     }
   }
 }
