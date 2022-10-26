@@ -34,6 +34,7 @@ pipeline {
       steps {
         sh '''
            echo "Started Unit Tests"
+           docker run -i -v $PWD/unit_tests:/workdir/unit_tests --workdir=/workdir python:3.12.0a1-alpine3.16 ls -al
            echo "Finished Unit Tests"
         '''
       }
