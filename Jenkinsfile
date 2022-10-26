@@ -106,6 +106,7 @@ pipeline {
         webhookUrl: "${TEAMS_WEB_HOOK}",
         color: 'FF0000',
         message: "Build Failed: ${JOB_NAME} - ${BUILD_DISPLAY_NAME}<br>Build duration time: ${currentBuild.durationString}"
+      )
     }
     always {
       // Put MS Teams notification
