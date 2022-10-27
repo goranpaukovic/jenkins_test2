@@ -51,7 +51,7 @@ pipeline {
     stage('Smoke Test') {
       steps {
         sh  'echo "Started smoke tests"'
-        build job: 'smoke-test', parameters: [string(name: 'targetEnvironment', value: build.number)]
+        build job: 'smoke-test', parameters: [string(name: 'targetEnvironment', value: currentBuild.number)]
         // copyArtifacts(projectName: 'smoke-test', selector: specific("${build.number}"));
         sh 'echo "Finished smoke tests"'
       }
