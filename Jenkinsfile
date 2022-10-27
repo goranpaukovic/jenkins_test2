@@ -18,16 +18,15 @@ pipeline {
   }
   
   stages {
-    stage('Clean WS') {
-      when { expression { false } }
-      steps {
-        cleanWs()
-        checkout scm
-      }
-    }
+    // stage('Clean WS') {
+    //   when { expression { false } }
+    //   steps {
+    //     cleanWs()
+    //     checkout scm
+    //   }
+    // }
     stage('Build sama5d27-wlsom1-ek') {
       steps {
-        // csSlackNotifier('STARTED', true)
         sh '''
            echo "...Build..."
            id
@@ -37,7 +36,6 @@ pipeline {
            date >> deploy-sama5d27-wlsom1-ek/build_file.obj
            docker run -i -v /opt/yocto_shares/sstate-cache:/opt/yocto_shares/sstate-cache -v /opt/yocto_shares/downloads:/opt/yocto_shares/downloads -v $PWD:/workdir --workdir=/workdir oe-build-goran:1.0 ./build_oe-core.sh
         '''
-        // docker run -i -v /opt/yocto_shares/sstate-cache:/opt/yocto_shares/sstate-cache -v /opt/yocto_shares/downloads:/opt/yocto_shares/downloads -v $PWD:/workdir --workdir=/workdir oe-build-goran:1.0 ./build_oe-core.sh
         // sh "./scripts/build-release-sama5d27-wlsom1-ek.sh"
       }
     }
@@ -48,7 +46,6 @@ pipeline {
            docker run -i --user $(id -u):$(id -g) -v $PWD/unit_tests:/workdir/unit_tests -v $PWD/scripts_pipelines:/workdir/scripts_pipelines --workdir=/workdir python:3.12.0a1-alpine3.16 ./scripts_pipelines/execute_tests.sh
            echo "Finished Unit Tests"
         '''
-        // docker run -i --user $(id -u):$(id -g) -v $PWD/unit_tests:/workdir/unit_tests -v $PWD/scripts_pipelines:/workdir/scripts_pipelines --workdir=/workdir python:3.12.0a1-alpine3.16 ./scripts_pipelines/execute_tests.sh
       }
     }
     stage('Smoke Test') {
@@ -60,13 +57,13 @@ pipeline {
         '''
         build job: 'smoke-test', parameters: [string(name: 'targetEnvironment', value: 'stage123')]
         //copyArtifacts(projectName: 'smoke-test', selector: specific("${build.number}"));
-        //build job: 'oe-build'
       }
     }
     stage('Copy artifacts sama5d27-wlsom1-ek') {
       steps {
         sh '''
           echo "Copy artifacts"
+          sh script_pipelines/copy_artifacts.sh
         '''
         //sh "./scripts/package-release-sama5d27-wlsom1-ek.sh"
       }
@@ -93,6 +90,7 @@ pipeline {
   post {
     success {
       archiveArtifacts 'deploy-sama5d27-wlsom1-ek/**/*.*'
+      // MS Teams notification
       office365ConnectorSend (
         status: "Pipeline Succes",
         webhookUrl: "${TEAMS_WEB_HOOK}",
@@ -101,6 +99,7 @@ pipeline {
       )
     }
     failure {
+      // MS Teams notification
       office365ConnectorSend (
         status: "Pipeline Failure",
         webhookUrl: "${TEAMS_WEB_HOOK}",
@@ -109,15 +108,13 @@ pipeline {
       )
     }
     always {
-      // Put MS Teams notification
-      //csSlackNotifier(currentBuild.currentResult)
-      sh '''
-        echo "Finished"
-      '''
       junit(
         allowEmptyResults: true,
         testResults: 'unit_tests/reports/*.xml'
       )
+      sh '''
+        echo "Finished"
+      '''
     }
   }
 }
