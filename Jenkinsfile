@@ -63,7 +63,7 @@ pipeline {
       steps {
         sh '''
           echo "Copy artifacts"
-          sh script_pipelines/copy_artifacts.sh
+          sh scripts_pipelines/copy_artifacts.sh
         '''
         //sh "./scripts/package-release-sama5d27-wlsom1-ek.sh"
       }
