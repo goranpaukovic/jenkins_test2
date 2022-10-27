@@ -34,29 +34,26 @@ pipeline {
            mkdir -p deploy-sama5d27-wlsom1-ek
            touch deploy-sama5d27-wlsom1-ek/build_file.obj
            date >> deploy-sama5d27-wlsom1-ek/build_file.obj
-           docker run -i -v /opt/yocto_shares/sstate-cache:/opt/yocto_shares/sstate-cache -v /opt/yocto_shares/downloads:/opt/yocto_shares/downloads -v $PWD:/workdir --workdir=/workdir oe-build-goran:1.0 ./build_oe-core.sh
+           sh scripts_pipelines/build_sama5d27-wlsom1-ek.sh
+           echo "...Build Done..."
         '''
-        // sh "./scripts/build-release-sama5d27-wlsom1-ek.sh"
       }
     }
     stage('Unit Tests') {
       steps {
         sh '''
            echo "Started Unit Tests"
-           docker run -i --user $(id -u):$(id -g) -v $PWD/unit_tests:/workdir/unit_tests -v $PWD/scripts_pipelines:/workdir/scripts_pipelines --workdir=/workdir python:3.12.0a1-alpine3.16 ./scripts_pipelines/execute_tests.sh
+           sh scripts_pipelines/unit_tests_sama5d27-wlsom1-ek.sh
            echo "Finished Unit Tests"
         '''
       }
     }
     stage('Smoke Test') {
       steps {
-        sh '''
-          echo "Started smoke tests"
-          echo "......"
-          echo "Finished smoke tests"
-        '''
+        sh  'echo "Started smoke tests"'
         build job: 'smoke-test', parameters: [string(name: 'targetEnvironment', value: 'stage123')]
-        //copyArtifacts(projectName: 'smoke-test', selector: specific("${build.number}"));
+        // copyArtifacts(projectName: 'smoke-test', selector: specific("${build.number}"));
+        sh 'echo "Finished smoke tests"'
       }
     }
     stage('Copy artifacts sama5d27-wlsom1-ek') {
@@ -65,7 +62,6 @@ pipeline {
           echo "Copy artifacts"
           sh scripts_pipelines/copy_artifacts.sh
         '''
-        //sh "./scripts/package-release-sama5d27-wlsom1-ek.sh"
       }
     }
     stage('Sync sources GM') {
