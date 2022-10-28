@@ -56,6 +56,14 @@ pipeline {
         sh 'echo "Finished smoke tests"'
       }
     }
+    stage('Integration Test') {
+      steps {
+        sh  'echo "Started Integration tests"'
+        //build job: 'smoke-test', parameters: [string(name: 'targetEnvironment', value: env.JOB_NAME)]
+        // copyArtifacts(projectName: 'smoke-test', selector: specific("${build.number}"));
+        sh 'echo "Finished Integration tests"'
+      }
+    }
     stage('Copy artifacts sama5d27-wlsom1-ek') {
       steps {
         sh '''
