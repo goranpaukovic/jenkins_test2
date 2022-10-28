@@ -37,6 +37,7 @@ pipeline {
            sh scripts_pipelines/build_sama5d27-wlsom1-ek.sh
            echo "...Build Done..."
         '''
+        archiveArtifacts 'deploy-sama5d27-wlsom1-ek/*.*'
       }
     }
     stage('Unit Tests') {
