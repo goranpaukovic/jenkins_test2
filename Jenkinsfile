@@ -51,6 +51,7 @@ pipeline {
       }
     }
     stage('Smoke Test') {
+      when { expression { false } }
       steps {
         sh  'echo "Started smoke tests"'
         build job: 'smoke-test', parameters: [string(name: 'targetEnvironment', value: env.JOB_NAME)]
