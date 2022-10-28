@@ -31,9 +31,9 @@ pipeline {
            echo "...Build..."
            id
            id -u
-           # mkdir -p deploy-sama5d27-wlsom1-ek
-           # touch deploy-sama5d27-wlsom1-ek/build_file.obj
-           # date >> deploy-sama5d27-wlsom1-ek/build_file.obj
+           mkdir -p deploy-sama5d27-wlsom1-ek
+           touch deploy-sama5d27-wlsom1-ek/build_file.obj
+           date >> deploy-sama5d27-wlsom1-ek/build_file.obj
            sh scripts_pipelines/build_sama5d27-wlsom1-ek.sh
            echo "...Build Done..."
         '''
