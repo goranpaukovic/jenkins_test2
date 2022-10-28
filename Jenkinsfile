@@ -46,6 +46,7 @@ pipeline {
            sh scripts_pipelines/unit_tests_sama5d27-wlsom1-ek.sh
            echo "Finished Unit Tests"
         '''
+        archiveArtifacts 'deploy-sama5d27-wlsom1-ek/**/*.*'
       }
     }
     stage('Smoke Test') {
