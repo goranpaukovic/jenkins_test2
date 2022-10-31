@@ -8,7 +8,7 @@ pipeline {
   }
   
   options {
-    buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '10'))
+    buildDiscarder(logRotator(numToKeepStr: '2', artifactNumToKeepStr: '10'))
     durabilityHint('PERFORMANCE_OPTIMIZED')
     copyArtifactPermission('smoke-test')
   }
